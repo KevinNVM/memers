@@ -15,6 +15,8 @@
                     class="mt-12 rounded-3xl border bg-gray-50 dark:border-gray-700 dark:bg-gray-800 -mx-6 sm:-mx-10 p-8 sm:p-10">
                     <h3 class="text-2xl font-semibold text-gray-700 dark:text-white">Login.</h3>
 
+                    <x-errors />
+
 
                     <form action="{{ route('login-action') }}" method="POST" class="mt-10 space-y-8 dark:text-white">
 
@@ -23,7 +25,7 @@
                         <div>
                             <div
                                 class="relative before:absolute before:bottom-0 before:h-0.5 before:left-0 before:origin-right focus-within:before:origin-left before:right-0 before:scale-x-0 before:m-auto before:bg-sky-400 dark:before:bg-sky-800 focus-within:before:!scale-x-100 focus-within:invalid:before:bg-red-400 before:transition before:duration-300">
-                                <input id="" type="name" placeholder="Nama"
+                                <input id="username" type="name" placeholder="Name"
                                     class="w-full bg-transparent pb-3  border-b border-gray-300 dark:placeholder-gray-300 dark:border-gray-600 outline-none  invalid:border-red-400 transition"
                                     name="username" required>
                             </div>
@@ -32,7 +34,7 @@
                         <div class="flex flex-col items-end">
                             <div
                                 class="w-full relative before:absolute before:bottom-0 before:h-0.5 before:left-0 before:origin-right focus-within:before:origin-left before:right-0 before:scale-x-0 before:m-auto before:bg-sky-400 dark:before:bg-sky-800 focus-within:before:!scale-x-100 focus-within:invalid:before:bg-red-400 before:transition before:duration-300">
-                                <input id="" type="password" placeholder="Password"
+                                <input id="password" type="password" placeholder="Password"
                                     class="w-full bg-transparent pb-3  border-b border-gray-300 dark:placeholder-gray-300 dark:border-gray-600 outline-none  invalid:border-red-400 transition"
                                     name="password" required>
                             </div>
@@ -49,6 +51,8 @@
                 <div class="border-t pt-12 text-gray-500 dark:border-gray-800">
                     <div class="space-x-4 text-center">
                         <span>&copy; MemersTKJ</span>
+                        <br />
+                        <span>Made By Made.</span>
                     </div>
                 </div>
             </div>

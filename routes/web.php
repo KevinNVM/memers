@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MemeController;
+use App\Http\Livewire\PostsLazy;
+use App\Models\Meme;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,10 +17,11 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [MemeController::class, 'welcome']);
 
 Route::get('/login', [AuthController::class, 'loginView'])->name('login');
 Route::post('/login', [AuthController::class, 'auth'])->name('login-action');
 Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
+Route::resource('memes', MemeController::class)->except(['edit', 'update']);

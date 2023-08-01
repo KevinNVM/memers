@@ -4,7 +4,7 @@
 
     <div class="max-w-screen-sm mx-auto my-8">
 
-        <livewire:posts />
+        <livewire:post :meme="$meme" />
 
     </div>
 

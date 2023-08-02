@@ -6,8 +6,11 @@
     @endforelse
 
     @if ($memes->hasMorePages())
-        <div x-data x-intersect="$wire.loadMore().then(
-        data => refreshSlide()
+        <div x-data
+            x-intersect="$wire.loadMore().then(
+        () => {
+            window.addEventListener('DOMContentLoaded', window.refreshSlide)
+        }
     )">
     @endif
 </div>

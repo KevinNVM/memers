@@ -48,7 +48,7 @@ class MemeController extends Controller
         if (Auth::guest()) abort(403);
 
         $validated = $request->validate([
-            'sources.*' => 'required|image|mimes:jpeg,png,jpg,gif,webp,mp4,mkv|max:4096',
+            'sources.*' => 'required|mimes:jpeg,png,jpg,gif,webp,mp4,mkv|max:4096',
             'location' => 'nullable',
             'caption' => 'nullable'
         ]);

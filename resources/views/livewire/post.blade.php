@@ -77,10 +77,23 @@
                 @foreach ($sources as $src)
                     <li class="splide__slide flex items-center justify-center lg:rounded-lg overflow-hidden" x-data
                         @dblclick="document.querySelector('#likePost{{ $meme->id }}').click()">
-                        <object data="{{ str_replace('public/', '', asset('storage/' . $src)) }}"
+                        {{-- <object data="{{ str_replace('public/', '', asset('storage/' . $src)) }}"
                             class="w-full object-cover " loading="lazy">
                             <img src="/404.jpg" loading="lazy">
-                        </object>
+                        </object> --}}
+                        @if (pathinfo($src, PATHINFO_EXTENSION) == 'mp4')
+                            <video controls class="w-full object-cover" loading="lazy" x-data
+                                x-intersect="$el.setAttribute('autoplay', 'true')" controls="false">
+                                <source src="{{ str_replace('public/', '', asset('storage/' . $src)) }}"
+                                    type="video/mp4">
+                                Your browser doesn't support HTML video. Here is a
+                                <a href="{{ str_replace('public/', '', asset('storage/' . $src)) }}">link to the
+                                    video</a> instead.
+                            </video>
+                        @else
+                            <img src="{{ str_replace('public/', '', asset('storage/' . $src)) }}"
+                                class="w-full object-cover" loading="lazy" alt="Image">
+                        @endif
                     </li>
                 @endforeach
             </ul>
@@ -102,5 +115,28 @@
         @endif
         <p class="text-xs text-gray-500">{{ $meme->created_at->diffForHumans() }}</p>
     </div>
+
+    <script>
+        // Get all video elements
+        var vids = document.querySelectorAll('video');
+
+        // Loop through all video elements and set controls as false
+        vids.forEach(vid => {
+
+            // Add event listener for click event
+            vid.addEventListener('click', function() {
+                // Toggle video play/pause
+                if (this.paused) {
+
+                    console.log('play')
+
+                    this.play();
+                } else {
+                    console.log('pause  ')
+                    this.pause();
+                }
+            });
+        });
+    </script>
 
 </div>

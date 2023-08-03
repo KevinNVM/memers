@@ -2,7 +2,7 @@
     <div class="flex items-center justify-between px-2 py-2">
         <div class="flex items-center gap-4">
             <img class="object-cover w-8 h-8 rounded-full ring ring-gray-300 dark:ring-gray-600"
-                src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=880&h=880&q=100" />
+                src="{{ url(str_replace('public', 'storage', $meme->user->image)) }}" />
             <div class="flex flex-col">
                 <p class="dark:text-white">
                     <a href="/">{{ $meme->user->username }}</a>
@@ -70,22 +70,31 @@
         </div>
     </div>
 
+    @php($sources = json_decode($meme->sources))
     <section class="splide" aria-label="Splide Basic HTML Example">
         <div class="splide__track">
             <ul class="splide__list">
-                @php($sources = json_decode($meme->sources))
                 @foreach ($sources as $src)
-                    <li class="splide__slide flex items-center justify-center lg:rounded-lg overflow-hidden" x-data
+                    <li class="splide__slide flex justify-center items-center lg:rounded-lg overflow-hidden" x-data
                         @dblclick="document.querySelector('#likePost{{ $meme->id }}').click()">
-                        <object data="{{ str_replace('public/', '', asset('storage/' . $src)) }}"
-                            class="w-full object-cover " loading="lazy">
-                            <img src="/404.jpg" loading="lazy">
-                        </object>
+                        @php($ext = explode('.', $src)[1])
+                        @php($src = str_replace('public/', 'storage/', $src))
+                        @if (in_array($ext, ['mp4', 'webm', 'mkv']))
+                            <video src="{{ url($src) }}" controls loop x-data
+                                x-intersect.full="$store.player.play($el)" x-intersect.full:leave="$el.pause()"
+                                loading="lazy" autoplay muted @click="$el.muted = false;"></video>
+                        @else
+                            <object data="{{ url($src) }}" class="w-full object-cover " loading="lazy">
+                                <img src="/404.jpg" loading="lazy">
+                            </object>
+                        @endif
                     </li>
                 @endforeach
             </ul>
         </div>
     </section>
+
+
 
     <div class="dark:text-white px-2">
 

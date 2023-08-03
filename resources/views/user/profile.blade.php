@@ -1,14 +1,6 @@
 <x-app-layout>
 
     <style>
-        h2 {
-            margin: 50px 0;
-        }
-
-        section {
-            flex-grow: 1;
-        }
-
         .file-drop-area {
             position: relative;
             display: flex;
@@ -58,78 +50,75 @@
                 outline: none;
             }
         }
-
-        .preview-image {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-            margin-right: 10px;
-        }
-
-        .preview-video {
-            width: 100%;
-            height: auto;
-            margin-bottom: 10px;
-        }
-
-        .previews-area {
-            max-height: 500px;
-            overflow-y: auto;
-        }
     </style>
 
     <x-navbar />
 
-    <div class="px-2 max-w-screen-sm mx-auto my-8 dark:text-white">
-        <h1 class="text-lg font-semibold ">Create New Meme</h1>
 
-        <x-errors />
+    <div class="max-w-screen-sm mx-auto my-8 ">
 
-        <form action="{{ route('memes.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
+        <h2 class="text-lg font-semibold dark:text-white text-center">
+            Profile
+        </h2>
 
 
-            <div class="flex flex-col gap-4">
-                <div>
-                    <label for="name-with-label" class="dark:text-gray-200">
-                        Location
-                    </label>
-                    <input type="text" id="name-with-label"
-                        class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                        name="location" placeholder="Location (Optional)" value="{{ old('location') }}" />
-                </div>
+        <div class="mx-auto max-w-xl my-12 px-2">
 
-                <div class="sources images">
-                    <div class="previews-area grid grid-cols-2 "></div>
-                    <div class="file-drop-area mt-2">
-                        <span class="fake-btn">Choose files</span>
-                        <span class="file-msg">or drag and drop files here</span>
-                        <input class="file-input" type="file" multiple name="sources[]" required x-data
-                            @change="if ($el.files.length > 10) {alert('Maximum files reached.'); $el.value = ''}">
+            <x-errors />
+
+            <form action="{{ route('user.update') }}" method="POST" class="space-y-5" enctype="multipart/form-data">
+
+                @csrf @method('put')
+
+                <div class="grid grid-cols-3 items-center">
+                    <label for="Profile Picture" class="col-span-1 block text-sm font-medium text-gray-500">Profile
+                        Picture</label>
+                    <div class="col-span-2">
+
+                        @php($image = str_replace('public/', 'storage/', $user->image));
+                        <div x-data="{ imagePreview: @js(url($image)) }">
+                            <!-- Image preview -->
+                            <img x-bind:src="imagePreview" alt="{{ $user->username }}"
+                                class="aspect-square w-24 rounded-lg mb-2">
+
+                            <!-- File input -->
+                            <input id="example1" type="file"
+                                x-on:change="imagePreview = URL.createObjectURL($event.target.files[0])"
+                                class="dark:text-white block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-blue-500 file:py-2.5 file:px-4 file:text-sm file:font-semibold file:text-white hover:file:bg-blue-700 focus:outline-none disabled:pointer-events-none disabled:opacity-60"
+                                name="image" />
+                        </div>
+
+
                     </div>
                 </div>
 
-
-                <div>
-
-                    <label class="dark:text-gray-200" for="name">
-                        Caption
-                        <textarea
-                            class="flex-1 w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 bg-white border border-gray-300 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                            id="caption" placeholder="Enter your caption" name="caption" rows="5" cols="40">{{ old('caption') }}</textarea>
-                    </label>
-
+                <div class="grid grid-cols-3 items-center">
+                    <label for="username" class="col-span-1 block text-sm font-medium text-gray-500">Username</label>
+                    <div class="col-span-2">
+                        <input type="text" autocomplete="username" id="username"
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-400 focus:ring focus:ring-blue-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 p-2"
+                            placeholder="Username" name="username" required value="{{ $user->username }}" />
+                    </div>
                 </div>
-            </div>
+                <div class="grid grid-cols-3 items-center">
+                    <label for="Password" class="col-span-1 block text-sm font-medium text-gray-500">Password</label>
+                    <div class="col-span-2">
+                        <input type="password" autocomplete="Password" id="Password"
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-400 focus:ring focus:ring-blue-200 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 p-2"
+                            placeholder="Enter New Password" name="password" />
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 items-center">
+                    <div class="col-span-2 col-start-2">
+                        <button
+                            class="rounded-lg border border-blue-500 bg-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-all hover:border-blue-700 hover:bg-blue-700 focus:ring focus:ring-blue-200 disabled:cursor-not-allowed disabled:border-blue-300 disabled:bg-blue-300">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
 
 
-            <button
-                class="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
-                Submit
-            </button>
-
-
-        </form>
 
     </div>
 

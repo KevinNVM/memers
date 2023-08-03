@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Meme;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class MemeController extends Controller
 {
 
     public function __construct()
     {
-        $this->middleware('auth')->except('show');
+        $this->middleware('auth')->only('update', 'create', 'store', 'destroy', 'index');
     }
 
     function welcome()
@@ -27,7 +28,7 @@ class MemeController extends Controller
     public function index()
     {
         return view('memes.index', [
-            'memes' => Meme::where('user_id', Auth::user()->id)->paginate(10)
+            'memes' => Meme::where('user_id', Auth::user()->id)->latest()->paginate(5)
         ]);
     }
 
@@ -48,7 +49,7 @@ class MemeController extends Controller
         if (Auth::guest()) abort(403);
 
         $validated = $request->validate([
-            'sources.*' => 'required|mimes:jpeg,png,jpg,gif,webp,mp4,mkv|max:4096',
+            'sources.*' => 'required|mimes:jpeg,png,jpg,gif,webp,webm,mp4,mkv|max:4096',
             'location' => 'nullable',
             'caption' => 'nullable'
         ]);
@@ -101,8 +102,19 @@ class MemeController extends Controller
     {
         if ($meme->user_id !== Auth::user()?->id) abort(403);
 
+        foreach (json_decode($meme->sources) as $key => $value) {
+            Storage::delete($value);
+        }
         $meme->delete();
 
         return redirect()->back();
+    }
+
+    function popular()
+    {
+        return view('memes.popular', [
+            'memes' => Meme::orderBy('likes', 'desc')->paginate(5)
+
+        ]);
     }
 }

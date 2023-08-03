@@ -10,30 +10,46 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-</head>
-
-<body class="min-h-screen dark:bg-gray-900 antialiased font-sans">
-
-    <div class=" ">
-        {{ $slot }}
-    </div>
-
-    @livewireScripts
-
+    <style>
+        .splide {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver"></script>
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sharer.js@latest/sharer.min.js"></script>
     <script>
         window.addEventListener('DOMContentLoaded', () => {
-            function loadSlide() {
-                var elms = document.getElementsByClassName('splide');
 
+            var elms = document.getElementsByClassName('splide');
+            var splides = [];
+
+            var splideConfig = {
+                lazyLoad: true,
+                autoHeight: true,
+                rewind: true,
+                rewindByDrag: true,
+            }
+
+            // Create and mount Splide instances, and store them in the array
+            for (var i = 0; i < elms.length; i++) {
+                var splide = new Splide(elms[i], splideConfig).mount();
+                splides.push(splide);
+            }
+
+            function loadSlide() {
+                // Later, when you want to destroy all instances:
+                for (var i = 0; i < splides.length; i++) {
+                    splides[i].destroy();
+                }
+
+                // And remount them again:
                 for (var i = 0; i < elms.length; i++) {
-                    new Splide(elms[i], {
-                        lazyLoad: true,
-                        perPage: 1
-                    }).mount();
+                    var splide = new Splide(elms[i], splideConfig).mount();
+                    splides[i] = splide; // Replace the destroyed instance with the new one in the array
                 }
             }
 
@@ -95,7 +111,9 @@
             function refreshSlide() {
                 loadSlide();
                 document.querySelectorAll('.splide__slide').forEach(slide => {
-                    const imageUrl = slide.querySelector('object').getAttribute('data');
+                    const imageUrl = slide.querySelector('object')?.getAttribute('data') || slide
+                        .querySelector('img')?.getAttribute('src');
+                    if (!imageUrl) return;
                     getAverageColorFromImage(imageUrl, (averageColor) => {
                         slide.style.backgroundColor = `rgb(${averageColor.join()}, 0.8)`
                         slide.style.backdropFilter = 'blur(8px)'
@@ -107,9 +125,36 @@
             window.refreshSlide = refreshSlide
 
 
+            Alpine.store('player', {
+                playing: null,
+                play(el) {
+                    if (this.playing) {
+                        this.playing.pause();
+                    }
+                    this.playing = el;
+                    this.playing.play();
+                }
+            });
+
+
+
 
         })
     </script>
+    <script src="/deps/Toast.min.js"></script>
+    <link rel="stylesheet" href="/deps/Toast.min.css">
+</head>
+
+<body class="min-h-screen dark:bg-gray-900 antialiased font-sans">
+
+
+    <div>
+        {{ $slot }}
+    </div>
+
+    @livewireScripts
+
+
 
 </body>
 

@@ -30,6 +30,17 @@
             class="absolute inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white dark:bg-gray-800 md:mt-0 md:p-0 md:top-0 md:relative md:bg-transparent md:w-auto md:opacity-100 md:translate-x-0 md:flex md:items-center">
             <div
                 class="flex overflow-hidden bg-white border divide-x  rtl:flex-row-reverse dark:bg-gray-900 dark:border-gray-700 dark:divide-gray-700 md:mx-6">
+                <a href="{{ route('memes.popular') }}"
+                    class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-base sm:px-6 dark:hover:bg-gray-800 dark:text-gray-300 gap-x-3 hover:bg-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-5 h-5 sm:w-6 sm:h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M7.5 3.75H6A2.25 2.25 0 003.75 6v1.5M16.5 3.75H18A2.25 2.25 0 0120.25 6v1.5m0 9V18A2.25 2.25 0 0118 20.25h-1.5m-9 0H6A2.25 2.25 0 013.75 18v-1.5M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+
+                    <span>Popular</span>
+                </a>
+
                 <a href="{{ route('memes.create') }}"
                     class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-base sm:px-6 dark:hover:bg-gray-800 dark:text-gray-300 gap-x-3 hover:bg-gray-100">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -52,16 +63,6 @@
                     <span>My Meme</span>
                 </a>
 
-                <button
-                    class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-base sm:px-6 dark:hover:bg-gray-800 dark:text-gray-300 gap-x-3 hover:bg-gray-100">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-5 h-5 sm:w-6 sm:h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M7.5 3.75H6A2.25 2.25 0 003.75 6v1.5M16.5 3.75H18A2.25 2.25 0 0120.25 6v1.5m0 9V18A2.25 2.25 0 0118 20.25h-1.5m-9 0H6A2.25 2.25 0 013.75 18v-1.5M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-
-                    <span>View</span>
-                </button>
             </div>
 
             <div class="flex justify-center md:block">
@@ -114,6 +115,14 @@
                                     You are not logged in.
                                 @endauth
                             </a>
+
+                            @auth
+                                <a href="{{ route('user.profile') }}"
+                                    class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-300"
+                                    role="menuitem">
+                                    Profile
+                                </a>
+                            @endauth
 
 
                             @auth

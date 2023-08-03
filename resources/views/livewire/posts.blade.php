@@ -1,17 +1,18 @@
 <div>
-    @forelse ($memes as $meme)
+    @foreach ($memes as $meme)
         <livewire:post :meme="$meme" :key="'post-' . $meme->id" />
-    @empty
-        <p class="text-gray-500 text-center">No post to show</p>
-    @endforelse
+    @endforeach
+
+    {{ $memes->hasMorePages() }}
 
     @if ($memes->hasMorePages())
-        <div x-data
-            x-intersect="$wire.loadMore().then(
-        () => {
-            window.addEventListener('DOMContentLoaded', window.refreshSlide)
-        }
-    )">
+        <div x-data x-intersect="$wire.loadMore().then(
+        refreshSlide
+    );">
+        @else
+            <h1 class="text-center font-semibold dark:text-white italic font-mono">
+                No more content to show.
+            </h1>
     @endif
 </div>
 </div>
